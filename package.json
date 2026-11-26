@@ -17,11 +17,11 @@
     "appId": "id.madrasah.fenace",
     "productName": "Fenace Madrasah",
     "artifactName": "Fenace-Madrasah-Portable-x64.${ext}",
-    "directories": { "output": "dist", "buildResources": "build" },
-    "files": ["main.js", "app/**/*", "package.json"],
+    "directories": { "output": "dist" },
+    "files": ["main.js", "index.html", "icon.ico", "package.json"],
     "win": {
       "target": [{ "target": "portable", "arch": ["x64"] }],
-      "icon": "build/icon.ico",
+      "icon": "icon.ico",
       "signAndEditExecutable": false
     },
     "portable": { "requestExecutionLevel": "user" }
