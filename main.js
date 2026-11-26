@@ -27,13 +27,13 @@ function buatJendela() {
     width: 1440, height: 900, minWidth: 980, minHeight: 640,
     backgroundColor: '#03120d',
     title: 'Fenace Madrasah',
-    icon: path.join(__dirname, 'build', 'icon.ico'),
+    icon: path.join(__dirname, 'icon.ico'),
     autoHideMenuBar: true,
     show: false,
     webPreferences: { contextIsolation: true, nodeIntegration: false, sandbox: true, spellcheck: false }
   });
   Menu.setApplicationMenu(null);
-  win.loadFile(path.join(__dirname, 'app', 'index.html'));
+  win.loadFile(path.join(__dirname, 'index.html'));
   win.once('ready-to-show', () => win.show());
   // tautan luar dibuka di browser, bukan di dalam aplikasi
   win.webContents.setWindowOpenHandler(({ url }) => { if (/^https?:/i.test(url)) shell.openExternal(url); return { action: 'deny' }; });
