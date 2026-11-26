@@ -1,0 +1,29 @@
+{
+  "name": "fenace-madrasah",
+  "productName": "Fenace Madrasah",
+  "version": "1.0.0",
+  "description": "Fenace Madrasah - Kas Logistik & Seragam (offline, portable)",
+  "author": "BY. Mbahjimut",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron .",
+    "dist": "electron-builder --win portable --x64"
+  },
+  "devDependencies": {
+    "electron": "33.2.1",
+    "electron-builder": "25.1.8"
+  },
+  "build": {
+    "appId": "id.madrasah.fenace",
+    "productName": "Fenace Madrasah",
+    "artifactName": "Fenace-Madrasah-Portable-x64.${ext}",
+    "directories": { "output": "dist", "buildResources": "build" },
+    "files": ["main.js", "app/**/*", "package.json"],
+    "win": {
+      "target": [{ "target": "portable", "arch": ["x64"] }],
+      "icon": "build/icon.ico",
+      "signAndEditExecutable": false
+    },
+    "portable": { "requestExecutionLevel": "user" }
+  }
+}
