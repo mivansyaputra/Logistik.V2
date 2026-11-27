@@ -252,7 +252,7 @@ html[data-skin="w"] .frame.go main>*:nth-child(2){animation-delay:.07s}html[data
 html[data-skin="w"] .frame.go .right>*:nth-child(1){animation-delay:.18s}html[data-skin="w"] .frame.go .right>*:nth-child(2){animation-delay:.26s}html[data-skin="w"] .frame.go .right>*:nth-child(n+3){animation-delay:.34s}
 html[data-skin="w"] .hero .btn{background:rgba(255,255,255,.85);color:var(--tx);box-shadow:0 4px 16px rgba(40,50,110,.1)}
 html[data-skin="w"] .sg .ct,html[data-skin="w"] .sg .sm{color:#aab4e0}
-@media(min-width:761px){html[data-skin="w"] .card,html[data-skin="w"] .tc,html[data-skin="w"] .rm{-webkit-backdrop-filter:blur(14px);backdrop-filter:blur(14px)}}
+/* perf: backdrop-filter blur dihapus (kartu skin W sudah ~92% solid, blur tidak kelihatan tapi berat di GPU laptop) */
 
 /* === grafik ala video, top bar === */
 @keyframes w-rl{from{clip-path:inset(-10% 100% -10% -2%)}to{clip-path:inset(-10% -4% -10% -2%)}}
@@ -260,7 +260,8 @@ html[data-skin="w"] .sg .ct,html[data-skin="w"] .sg .sm{color:#aab4e0}
 html[data-skin="w"] #tb{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin:0 4px 12px}
 html[data-skin="w"] #tb>span{display:inline-flex;align-items:center;gap:8px;padding:8px 14px;border-radius:99px;background:rgba(255,255,255,.8);box-shadow:0 4px 16px rgba(40,50,110,.08);font-size:12px;color:var(--mu)}
 html[data-skin="w"] #tb b{color:var(--tx);font-weight:700}html[data-skin="w"] #tb .bc b{color:#4a52d6}html[data-skin="w"] #tb .dt2 i{width:7px;height:7px;border-radius:50%;background:var(--ok)}
-html[data-skin="w"] .frame{min-height:calc(100vh - 90px)}
+@media(min-width:761px){html[data-skin="w"] body{position:relative}html[data-skin="w"] #tb{position:absolute;top:33px;left:125px;margin:0;z-index:5;flex-wrap:nowrap}html[data-skin="w"] main{padding-top:46px}html[data-skin="w"] .frame{min-height:calc(100vh - 32px)}}
+@media(max-width:760px){html[data-skin="w"] .frame{min-height:calc(100vh - 90px)}}
 @media print{html[data-skin="w"] #tb{display:none}}
 /* ===== grafik skin putih: set baru ===== */
 html[data-skin="w"] .arw{display:flex;align-items:center;gap:16px;margin-top:12px}
@@ -375,7 +376,7 @@ const ic=n=>`<svg class="ic" viewBox="0 0 24 24"><path d="${I[n]}"/></svg>`;
 const PG=[['home','Dashboard'],['kas','Kas'],['seragam','Seragam'],['lpj','LPJ'],['data','Data'],['atur','Atur']];
 const CAT={rampatan:'Rampatan',perlengkapan:'Perlengkapan',konsumsi:'Konsumsi',transportasi:'Transportasi'},CK=Object.keys(CAT);
 const HM=['Muharram','Safar','Rabiul Awal','Rabiul Akhir','Jumadil Awal','Jumadil Akhir','Rajab','Syaban','Ramadhan','Syawal','Zulkaidah','Zulhijjah'];
-let db={tx:[],set:{}};try{const raw=JSON.parse(localStorage.getItem('fk_v1')||'null');if(raw&&typeof raw==='object'&&!Array.isArray(raw)){db=raw;db.tx=Array.isArray(raw.tx)?raw.tx:[];db.set=raw.set&&typeof raw.set==='object'&&!Array.isArray(raw.set)?raw.set:{};{const f0=new Date().toISOString().slice(0,10);db.tx=db.tx.filter(t=>t&&typeof t==='object').map((t,i)=>({...t,id:t.id!=null?t.id:'x'+i+'_'+Date.now(),d:typeof t.d==='string'&&/^\d{4}-\d{2}-\d{2}/.test(t.d)?t.d.slice(0,10):f0,y:t.y=='in'?'in':'out',a:+t.a||0}))}}}catch(e){db={tx:[],set:{}}}
+let _fsig=null;let db={tx:[],set:{}};try{const raw=JSON.parse(localStorage.getItem('fk_v1')||'null');if(raw&&typeof raw==='object'&&!Array.isArray(raw)){db=raw;db.tx=Array.isArray(raw.tx)?raw.tx:[];db.set=raw.set&&typeof raw.set==='object'&&!Array.isArray(raw.set)?raw.set:{};{let fs=null;try{fs=JSON.parse(localStorage.getItem('fk_foto')||'null')}catch(e){}if(fs&&typeof fs==='object'&&!Array.isArray(fs)&&!(raw.foto&&typeof raw.foto==='object'&&Object.keys(raw.foto).length)){db.foto=fs;_fsig=Object.assign({},fs)}}{const f0=new Date().toISOString().slice(0,10);db.tx=db.tx.filter(t=>t&&typeof t==='object').map((t,i)=>({...t,id:t.id!=null?t.id:'x'+i+'_'+Date.now(),d:typeof t.d==='string'&&/^\d{4}-\d{2}-\d{2}/.test(t.d)?t.d.slice(0,10):f0,y:t.y=='in'?'in':'out',a:+t.a||0}))}}}catch(e){db={tx:[],set:{}}}
 const rp=n=>'Rp '+Math.round(n).toLocaleString('id-ID'),iso=d=>d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0'),dm=s=>s.slice(8)+'/'+s.slice(5,7);
 let hf;try{hf=new Intl.DateTimeFormat('id-u-ca-islamic-umalqura-nu-latn',{day:'numeric',month:'numeric',year:'numeric'});if(!hf.formatToParts)throw new Error('formatToParts tidak tersedia')}catch(e){try{hf=new Intl.DateTimeFormat('en-u-ca-islamic-nu-latn',{day:'numeric',month:'numeric',year:'numeric'})}catch(_){hf=new Intl.DateTimeFormat('id-ID',{day:'numeric',month:'numeric',year:'numeric'})}}
 function hij(d){const x=new Date(d.getTime());x.setDate(x.getDate()+(db.set.off||0));const p={};hf.formatToParts(x).forEach(o=>p[o.type]=+o.value);return p}
@@ -425,7 +426,10 @@ document.querySelectorAll('[data-d]').forEach(b=>b.onclick=()=>{sel=b.dataset.d;
 document.querySelectorAll('[data-tx]').forEach(b=>b.onclick=ev=>{ev.stopPropagation();const t=db.tx.find(x=>x.id==b.dataset.tx);if(!t)return;const snap=JSON.stringify(db.tx);db.tx=db.tx.filter(x=>x.id!=t.id);save();render();side();gtoast('Transaksi dihapus',esc(t.n||'Transaksi')+' '+rp(t.a)+' (bisa diurungkan)',()=>{db.tx=JSON.parse(snap);save();render();side()})})}
 
 const nid=()=>Date.now().toString(36)+Math.random().toString(36).slice(2,6),num=v=>+String(v).replace(/\D/g,'')||0,$$=q=>[...document.querySelectorAll(q)],esc=t=>String(t).replace(/[<>&"]/g,c=>({'<':'&lt;','>':'&gt;','&':'&amp;','"':'&quot;'}[c]));
-function save(){try{localStorage.setItem('fk_v1',JSON.stringify(db))}catch(e){gtoast('Penyimpanan penuh','Unduh cadangan di menu Atur, lalu hapus foto nota lama')}calc()}
+function fotoBerubah(){const f=db.foto||{},ks=Object.keys(f);if(!_fsig)return true;if(ks.length!==Object.keys(_fsig).length)return true;for(const k of ks)if(f[k]!==_fsig[k])return true;return false}
+function save(){const {foto,...inti}=db,fb=fotoBerubah();let gagal=0;try{localStorage.setItem('fk_v1',JSON.stringify(inti))}catch(e){gagal=1}
+if(!gagal&&fb){try{localStorage.setItem('fk_foto',JSON.stringify(db.foto||{}));_fsig=Object.assign({},db.foto||{})}catch(e){gagal=1;try{localStorage.setItem('fk_v1',JSON.stringify(db))}catch(_){}}}
+if(gagal)gtoast('Penyimpanan penuh','Unduh cadangan di menu Atur, lalu hapus foto nota lama');calc()}
 const fk=t=>t.bid||t.id;
 function kecil(file,cb){const r=new FileReader();r.onload=()=>{const im=new Image();im.onload=()=>{const k=Math.min(1,1100/Math.max(im.width,im.height)),c=document.createElement('canvas');c.width=Math.round(im.width*k);c.height=Math.round(im.height*k);c.getContext('2d').drawImage(im,0,0,c.width,c.height);cb(c.toDataURL('image/jpeg',.62))};im.onerror=()=>gtoast('Gagal','File bukan gambar');im.src=r.result};r.readAsDataURL(file)}
 function ambilFoto(cb){const i=document.createElement('input');i.type='file';i.accept='image/*';i.onchange=()=>{const f=i.files[0];if(f)kecil(f,cb)};i.click()}
